@@ -1,0 +1,5 @@
+dataset/
+data/
+model.pth
+__pycache__/
+*.pyc

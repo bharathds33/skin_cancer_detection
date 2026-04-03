@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Skin Cancer Detection</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            background: white;
+            width: 500px;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        input[type="file"] {
+            margin: 15px 0;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        button:hover {
+            background: #5a67d8;
+        }
+
+        .result {
+            margin-top: 20px;
+            text-align: left;
+            padding: 15px;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+
+        .final {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .confident {
+            color: green;
+        }
+
+        .uncertain {
+            color: red;
+        }
+
+        .section {
+            margin-top: 15px;
+        }
+
+        ul {
+            margin-top: 5px;
+            padding-left: 18px;
+        }
+
+        li {
+            margin-bottom: 5px;
+        }
+
+        .prob-box {
+            background: #eef1ff;
+            padding: 10px;
+            border-radius: 6px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>Skin Cancer Detection</h2>
+
+    <form method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" required><br>
+        <button type="submit">Analyze Image</button>
+    </form>
+
+    {% if result %}
+    <div class="result">
+
+        <div class="final {% if result.final == 'Uncertain' %}uncertain{% else %}confident{% endif %}">
+            {{ result.final }}
+        </div>
+
+        <div class="section">
+            <strong>Top Prediction:</strong> {{ result.top }}
+        </div>
+
+        <div class="section">
+            <strong>Confidence:</strong> {{ result.confidence }}%
+        </div>
+
+        <div class="section">
+            <strong>Status:</strong> {{ result.status }}
+        </div>
+
+        <div class="section prob-box">
+            <strong>Probability Breakdown</strong>
+            <ul>
+                {% for k,v in result.probs.items() %}
+                    <li>{{ k }} → {{ v }}%</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        {% if result.causes %}
+        <div class="section">
+            <strong>Possible Causes</strong>
+            <ul>
+                {% for c in result.causes %}
+                    <li>{{ c }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        {% if result.precautions %}
+        <div class="section">
+            <strong>Precautions</strong>
+            <ul>
+                {% for p in result.precautions %}
+                    <li>{{ p }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+    </div>
+    {% endif %}
+
+</div>
+
+</body>
+</html>
